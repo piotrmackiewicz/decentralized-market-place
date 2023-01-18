@@ -1,0 +1,17 @@
+{
+  "name": "hardhat-project",
+  "scripts": {
+    "deploy-contracts": "npx hardhat run --network ganache scripts/deploy.ts",
+    "start-backend": "cd backend && npm start",
+    "seed-blockchain": "npx hardhat run --network ganache scripts/seed.ts",
+    "start-client": "cd client && npm start"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "hardhat": "^2.12.3",
+    "uuid": "^9.0.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.0"
+  }
+}

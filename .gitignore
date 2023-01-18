@@ -1,0 +1,12 @@
+# root
+/artifacts
+/cache
+/ipfs
+/node_modules
+/typechain-types
+
+# backend
+/backend/node_modules
+
+# client
+/client/node_modules
