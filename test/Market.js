@@ -49,6 +49,7 @@ describe('Market', () => {
     await expect(transaction)
       .to.emit(market, 'ShopCreated')
       .withArgs(
+        await shop.getId(),
         newShopAddress,
         await shop.getOwner(),
         await shop.getName(),

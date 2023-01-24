@@ -1,4 +1,4 @@
-const MARKET_ADDRESS = '0x9B639C263a5a4d51f87C94eb0Ebe34c4f89ea24B';
+const MARKET_ADDRESS = '0x2047a8cBa2Fd719366506926100c8a1B4B18f30A';
 const MARKET_ABI = [
   {
     inputs: [],
@@ -257,6 +257,12 @@ const SHOP_ABI = [
       },
       {
         indexed: false,
+        internalType: 'string',
+        name: 'contentId',
+        type: 'string',
+      },
+      {
+        indexed: false,
         internalType: 'uint256',
         name: 'quantity',
         type: 'uint256',
@@ -315,6 +321,12 @@ const SHOP_ABI = [
         indexed: false,
         internalType: 'uint256',
         name: 'id',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'shopId',
         type: 'uint256',
       },
       {

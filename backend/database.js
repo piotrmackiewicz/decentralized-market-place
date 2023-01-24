@@ -187,6 +187,18 @@ class DatabaseConnection {
     return result.rows;
   }
 
+  async getOffersListingByShopId(shopId) {
+    const query = `
+      SELECT title, category, quantity, archived, id, shop_id, description, price, images
+      FROM offers
+      WHERE shop_id = $1 AND archived = false
+      ORDER BY id
+    `;
+    const values = [shopId];
+    const result = await this.#pool.query(query, values);
+    return result.rows;
+  }
+
   async getOfferByShopIdAndOfferId(shopId, offerId) {
     const query = `
       SELECT title, category, quantity, archived, id, shop_id, description, price, images
@@ -194,6 +206,18 @@ class DatabaseConnection {
       WHERE shop_id = $1 AND id = $2
     `;
     const values = [shopId, offerId];
+    const result = await this.#pool.query(query, values);
+    return result.rows[0];
+  }
+
+  async getSalesByBuyer(buyer) {
+    console.log(buyer);
+    const query = `
+      SELECT shop_id, offer_id, buyer, price, quantity
+      FROM sales
+      WHERE buyer = $1 
+    `;
+    const values = [buyer];
     const result = await this.#pool.query(query, values);
     return result.rows;
   }

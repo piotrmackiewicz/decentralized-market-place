@@ -27,14 +27,30 @@ async function main() {
   });
 
   app.get('/offers', async (req, res) => {
-    const { categoryId } = req.query;
-    // If no categoryId is provided it will return 422 because there
-    // is no case which should require all offers (other params will be done later)
-    if (!categoryId) {
-      res.status(422);
+    const { categoryId, shopId } = req.query;
+
+    if (categoryId) {
+      const offers = await db.getOffersListingByCategory(categoryId);
+      return res.json({ data: offers });
     }
-    const offers = await db.getOffersListingByCategory(categoryId);
-    res.json({ data: offers });
+
+    if (shopId) {
+      const offers = await db.getOffersListingByShopId(shopId);
+      return res.json({ data: offers });
+    }
+
+    res.status(422);
+  });
+
+  app.get('/sales', async (req, res) => {
+    const { buyer } = req.query;
+
+    if (buyer) {
+      const sales = await db.getSalesByBuyer(buyer);
+      return res.json({ data: sales });
+    }
+
+    res.status(422);
   });
 
   app.get('/offer', async (req, res) => {
@@ -43,7 +59,7 @@ async function main() {
       res.status(422);
     }
     const offer = await db.getOfferByShopIdAndOfferId(shopId, offerId);
-    res.json({ offer });
+    res.json(offer);
   });
 
   app.listen('3001', () => {

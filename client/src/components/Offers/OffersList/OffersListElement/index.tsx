@@ -1,18 +1,18 @@
 import { Typography } from 'antd';
 import { ethers } from 'ethers';
-import { Offer } from '../../../types';
+import { Offer } from '../../../../types';
 import {
   Avatar,
   LeftSideWrapper,
   RightSideWrapper,
   Wrapper,
-} from './CategoryOffersElement.styled';
+} from './OffersListElement.styled';
 
 interface Props {
   offer: Offer;
 }
 
-export const CategoryOffersElement = ({ offer }: Props) => {
+export const OffersListElement = ({ offer }: Props) => {
   return (
     <Wrapper to={`/offer/${offer.shop_id}/${offer.id}`} state={{ offer }}>
       <LeftSideWrapper>

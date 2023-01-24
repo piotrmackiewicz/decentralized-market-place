@@ -1,9 +1,21 @@
 import { api } from '.';
 import { Offer } from '../types';
 
-export const fetchOffersByCategoryId = async (categoryId: number) => {
+interface FetchOffersParams {
+  categoryId?: number;
+  shopId?: number;
+}
+
+export const fetchOffers = async (params: FetchOffersParams) => {
+  const requestParams: FetchOffersParams = {};
+  if (params.categoryId !== undefined) {
+    requestParams.categoryId = params.categoryId;
+  }
+  if (params.shopId !== undefined) {
+    requestParams.shopId = params.shopId;
+  }
   const response = await api.get<{ data: Offer[] }>('/offers', {
-    params: { categoryId },
+    params: requestParams,
   });
   return response.data;
 };

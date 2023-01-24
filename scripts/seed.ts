@@ -1,7 +1,7 @@
 import { ethers } from 'hardhat';
 
 async function seed() {
-  let marketAddress = '0x9B639C263a5a4d51f87C94eb0Ebe34c4f89ea24B';
+  let marketAddress = '0x2047a8cBa2Fd719366506926100c8a1B4B18f30A';
 
   const market = await ethers.getContractAt('Market', marketAddress);
 

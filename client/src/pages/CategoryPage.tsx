@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
-import { CategoryOffers } from '../components/Offers/CategoryOffers';
+import { CategoryOffers } from '../components/Categories/CategoryOffers';
 
 export const CategoryPage = () => {
   const { categoryId } = useParams<{ categoryId: string }>();

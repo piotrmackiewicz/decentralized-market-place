@@ -5,6 +5,7 @@ export class Web3Store {
   public provider: ethers.providers.Web3Provider | null = null;
   public network: ethers.providers.Network | null = null;
   public account: string = '';
+  public signer: ethers.providers.JsonRpcSigner | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -25,8 +26,13 @@ export class Web3Store {
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
-
     this.account = accounts[0];
+  };
+
+  public loadSigner = () => {
+    if (!this.provider) return;
+    const signer = this.provider.getSigner();
+    this.signer = signer;
   };
 }
 

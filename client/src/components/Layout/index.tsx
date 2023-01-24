@@ -30,6 +30,13 @@ export const Layout = observer(({ children }: Props) => {
             menu={{
               items: [
                 {
+                  label: <Link to='/my-shopping'>My shopping</Link>,
+                  key: 'my-shopping',
+                },
+                {
+                  type: 'divider',
+                },
+                {
                   label: <span>Become a Seller!</span>,
                   key: 'become-a-seller',
                 },

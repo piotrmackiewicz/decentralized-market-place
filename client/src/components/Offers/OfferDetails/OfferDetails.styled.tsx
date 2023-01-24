@@ -26,3 +26,7 @@ export const BuyWrapper = styled.div`
   gap: 12px;
   margin-bottom: 12px;
 `;
+
+export const ShopLinkWrapper = styled.div`
+  display: inline-block;
+`;

@@ -1,6 +1,10 @@
 import { Button, Col, InputNumber, Row, Typography } from 'antd';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useMarketContract } from '../../../hooks/useMarketContract';
+import { useOfferUpdate } from '../../../hooks/useOfferUpdate';
+import { useShopContract } from '../../../hooks/useShopContract';
 import { Offer } from '../../../types';
 import { OfferGallery } from '../../OfferGallery';
 import {
@@ -9,6 +13,7 @@ import {
   OfferTopInfoLeftSide,
   OfferTopInfoRightSide,
   BuyWrapper,
+  ShopLinkWrapper,
 } from './OfferDetails.styled';
 
 interface Props {
@@ -19,19 +24,39 @@ export const OfferDetails = ({ offer }: Props) => {
     string | number | null
   >(1);
   const [buyPrice, setBuyPrice] = useState<string>('0');
+  const [shopAddress, setShopAddress] = useState('');
+  const { getShopAddress } = useMarketContract();
+  const { loading, shopInfo, buyProduct } = useShopContract({
+    shopContractAddress: shopAddress,
+  });
+  const { updatedOffer } = useOfferUpdate({
+    shopContractAddress: shopAddress,
+    offer,
+  });
 
   const handleBuy = () => {
-    console.log(`Buy ${selectedQuantity} pieces for ~${buyPrice}`);
-    // TODO: call Shop contract method buyProduct
+    buyProduct(updatedOffer.id, Number(selectedQuantity), buyPrice);
   };
+
+  useEffect(() => {
+    const loadShopAddress = async () => {
+      const address = await getShopAddress(updatedOffer.shop_id);
+      if (address) {
+        setShopAddress(address);
+      }
+    };
+
+    loadShopAddress();
+  }, [getShopAddress, updatedOffer.shop_id]);
 
   useEffect(() => {
     setBuyPrice(
       (
-        Number(selectedQuantity) * Number(ethers.utils.formatEther(offer.price))
+        Number(selectedQuantity) *
+        Number(ethers.utils.formatEther(updatedOffer.price))
       ).toFixed(5)
     );
-  }, [offer.price, selectedQuantity]);
+  }, [updatedOffer.price, selectedQuantity]);
 
   return (
     <Row gutter={48}>
@@ -39,34 +64,47 @@ export const OfferDetails = ({ offer }: Props) => {
         <OfferInfo>
           <OfferTopInfo>
             <OfferTopInfoLeftSide>
-              <Typography.Title level={2}>{offer.title}</Typography.Title>
+              <Typography.Title level={2}>
+                {updatedOffer.title}
+              </Typography.Title>
               {/* TODO: here should be link to all offers from this shop */}
-              <Typography>Shop: {offer.shop_id}</Typography>
+              {shopInfo.id && shopInfo.name && (
+                <ShopLinkWrapper>
+                  <span>Shop: </span>
+                  <Link to={`/shop/${shopInfo.id}`}>{shopInfo.name}</Link>
+                </ShopLinkWrapper>
+              )}
             </OfferTopInfoLeftSide>
             <OfferTopInfoRightSide>
               <Typography.Title level={2}>
-                {ethers.utils.formatEther(offer.price)} ETH
+                {ethers.utils.formatEther(updatedOffer.price)} ETH
               </Typography.Title>
-              <Typography>Pieces left: {offer.quantity}</Typography>
+              <Typography>Pieces left: {updatedOffer.quantity}</Typography>
             </OfferTopInfoRightSide>
           </OfferTopInfo>
-          <div>{offer.description}</div>
+          <div>{updatedOffer.description}</div>
         </OfferInfo>
       </Col>
       <Col span={8}>
         <BuyWrapper>
           <InputNumber
             min={1}
-            max={offer.quantity}
+            max={updatedOffer.quantity}
             value={selectedQuantity}
             onChange={setSelectedQuantity}
           />
-          <Button type='primary' onClick={handleBuy}>
-            Buy {selectedQuantity} pieces for ~{buyPrice} ETH
+          <Button
+            type='primary'
+            onClick={handleBuy}
+            loading={loading}
+            disabled={!selectedQuantity}
+          >
+            Buy {selectedQuantity} {selectedQuantity === 1 ? 'piece' : 'pieces'}{' '}
+            for ~{buyPrice} ETH
           </Button>
         </BuyWrapper>
-        {offer.images ? (
-          <OfferGallery images={offer.images} />
+        {updatedOffer.images ? (
+          <OfferGallery images={updatedOffer.images} />
         ) : (
           // TODO: make this placeholder pretty
           <Typography>No images</Typography>

@@ -14,3 +14,21 @@ export type Offer = {
   price: string;
   images: string[];
 };
+
+export type Shop = {
+  id: string;
+  name: string;
+  owner: string;
+  paymentAddress: string;
+  offersCount: number;
+  salesCount: number;
+  offersSuspended: boolean;
+};
+
+export type Sale = {
+  shop_id: number;
+  offer_id: number;
+  buyer: string;
+  price: string;
+  quantity: number;
+};

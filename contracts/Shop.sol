@@ -40,6 +40,7 @@ contract Shop {
         string title,
         string description,
         string[] images,
+        string contentId,
         uint256 quantity,
         uint256 price,
         uint256 category
@@ -47,6 +48,7 @@ contract Shop {
 
     event SaleCreated(
         uint256 id,
+        uint256 shopId,
         uint256 offerId,
         address buyer,
         uint256 price,
@@ -158,6 +160,7 @@ contract Shop {
             _title,
             _description,
             _images,
+            _contentId,
             _quantity,
             _price,
             _category
@@ -209,6 +212,7 @@ contract Shop {
         });
         emit SaleCreated(
             salesCount,
+            id,
             offer.id,
             msg.sender,
             offer.price,

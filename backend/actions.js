@@ -43,10 +43,13 @@ async function setShopEventListeners(db, shop) {
     db.updateOfferContent(id, shopId, title, description);
   });
 
-  shop.on('SaleCreated', (id, offerId, buyer, price, quantity, newQuantity) => {
-    db.insertSale(id, shopId, offerId, buyer, price, quantity);
-    db.updateOfferQuantity(offerId, shopId, newQuantity);
-  });
+  shop.on(
+    'SaleCreated',
+    (id, shopId, offerId, buyer, price, quantity, newQuantity) => {
+      db.insertSale(id, shopId, offerId, buyer.toLowerCase(), price, quantity);
+      db.updateOfferQuantity(offerId, shopId, newQuantity);
+    }
+  );
 }
 
 async function syncDatabaseWithBlockchain(provider, db, market) {
