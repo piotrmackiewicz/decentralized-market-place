@@ -177,10 +177,12 @@ class DatabaseConnection {
 
   async getOffersListingByCategory(categoryId) {
     const query = `
-      SELECT title, category, quantity, archived, id, shop_id, description, price, images
-      FROM offers
-      WHERE category = $1 AND archived = false
-      ORDER BY id, shop_id
+      SELECT o.title, o.category, o.quantity, o.archived, o.id, o.shop_id, o.description, o.price, o.images
+      FROM offers o
+      JOIN shops s
+      ON o.shop_id = s.id
+      WHERE o.category = $1 AND o.archived = false AND s.suspended = false
+      ORDER BY o.id, o.shop_id
     `;
     const values = [categoryId];
     const result = await this.#pool.query(query, values);
