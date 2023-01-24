@@ -123,7 +123,14 @@ async function syncDatabaseWithBlockchain(provider, db, market) {
         // 1. first run node backend/index.js ignores first transaction
         // 2. second run node backend/index.js gives correct result
         return Promise.all([
-          db.insertSale(id, shopId, offerId, buyer, price, quantity),
+          db.insertSale(
+            id,
+            shopId,
+            offerId,
+            buyer.toLowerCase(),
+            price,
+            quantity
+          ),
           db.updateOfferQuantity(offerId, shopId, newQuantity),
         ]);
       })

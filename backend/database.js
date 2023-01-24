@@ -211,15 +211,31 @@ class DatabaseConnection {
   }
 
   async getSalesByBuyer(buyer) {
-    console.log(buyer);
     const query = `
-      SELECT shop_id, offer_id, buyer, price, quantity
-      FROM sales
-      WHERE buyer = $1 
+      SELECT DISTINCT s.buyer as sale_buyer, s.price as sale_price, s.quantity as sale_quantity, o.title, o.category, o.quantity, o.archived, o.id, o.shop_id, o.description, o.price, o.images
+      FROM offers o
+      JOIN sales s
+      ON s.buyer = $1
+      AND (o.shop_id = s.shop_id AND o.id = s.offer_id)
     `;
     const values = [buyer];
     const result = await this.#pool.query(query, values);
-    return result.rows;
+    return result.rows.map((row) => ({
+      price: row.sale_price,
+      quantity: row.sale_quantity,
+      buyer: row.sale_buyer,
+      offer: {
+        title: row.title,
+        category: row.category,
+        quantity: row.quantity,
+        archived: row.archived,
+        id: row.id,
+        shop_id: row.shop_id,
+        description: row.description,
+        price: row.price,
+        images: row.images,
+      },
+    }));
   }
 }
 

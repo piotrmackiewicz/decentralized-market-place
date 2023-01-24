@@ -27,7 +27,7 @@ async function main() {
   });
 
   app.get('/offers', async (req, res) => {
-    const { categoryId, shopId } = req.query;
+    const { categoryId, shopId, buyer } = req.query;
 
     if (categoryId) {
       const offers = await db.getOffersListingByCategory(categoryId);

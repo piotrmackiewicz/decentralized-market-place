@@ -1,14 +1,19 @@
-import { Alert, Spin } from 'antd';
+import { Alert, Card, Spin } from 'antd';
 import { AxiosError } from 'axios';
 import { observer } from 'mobx-react';
 import { useQuery } from 'react-query';
 import { fetchSales } from '../../api/sales';
 import web3Store from '../../store/Web3Store';
 import { Sale } from '../../types';
+import { SalesList } from '../SalesList';
 
 export const MyShopping = observer(() => {
   const { account } = web3Store;
-  const { isLoading, error, data } = useQuery<{ data: Sale[] }, AxiosError>(
+  const {
+    isLoading: isLoadingSales,
+    error: errorSales,
+    data: sales,
+  } = useQuery<{ data: Sale[] }, AxiosError>(
     ['user-sales', account],
     () => fetchSales({ buyer: account }),
     {
@@ -16,16 +21,20 @@ export const MyShopping = observer(() => {
     }
   );
 
-  if (isLoading) {
+  if (isLoadingSales) {
     return <Spin />;
   }
 
-  if (error) {
-    return <Alert type='error' message={error.message} />;
+  if (errorSales) {
+    return <Alert type='error' message={errorSales.message} />;
   }
 
-  if (data?.data) {
-    return <p>{JSON.stringify(data.data)}</p>;
+  if (sales?.data) {
+    return (
+      <Card>
+        <SalesList sales={sales.data} />
+      </Card>
+    );
   }
 
   return null;

@@ -26,9 +26,8 @@ export type Shop = {
 };
 
 export type Sale = {
-  shop_id: number;
-  offer_id: number;
   buyer: string;
   price: string;
   quantity: number;
+  offer: Offer;
 };
