@@ -10,6 +10,8 @@ import web3Store from '../../store/Web3Store';
 import { observer } from 'mobx-react';
 import Blockies from 'react-blockies';
 import { Link } from 'react-router-dom';
+import { useCallback } from 'react';
+import { ItemType } from 'antd/es/menu/hooks/useItems';
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +19,35 @@ interface Props {
 
 export const Layout = observer(({ children }: Props) => {
   const { account } = web3Store;
-  const accountForDisplay = `${account.slice(0, 5)}...${account.slice(-4)}`;
+  const accountForDisplay = `${account.address.slice(
+    0,
+    5
+  )}...${account.address.slice(-4)}`;
+
+  const buildMenuItems = useCallback(() => {
+    const menuItems: ItemType[] = [
+      {
+        label: <Link to='/my-shopping'>My shopping</Link>,
+        key: 'my-shopping',
+      },
+      {
+        type: 'divider',
+      },
+    ];
+    if (account.isSeller) {
+      menuItems.push({
+        label: <span>My Shops</span>,
+        key: 'my-shops',
+      });
+    } else {
+      menuItems.push({
+        label: <span>Become a Seller!</span>,
+        key: 'become-a-seller',
+      });
+    }
+
+    return menuItems;
+  }, [account.isSeller]);
 
   return (
     <AntLayout>
@@ -28,25 +58,13 @@ export const Layout = observer(({ children }: Props) => {
           </Link>
           <Dropdown
             menu={{
-              items: [
-                {
-                  label: <Link to='/my-shopping'>My shopping</Link>,
-                  key: 'my-shopping',
-                },
-                {
-                  type: 'divider',
-                },
-                {
-                  label: <span>Become a Seller!</span>,
-                  key: 'become-a-seller',
-                },
-              ],
+              items: buildMenuItems(),
             }}
             trigger={['click']}
           >
             <ProfileButton type='ghost' icon={<CaretDownFilled />}>
               {accountForDisplay}
-              <Blockies seed={account} size={9} scale={2.5} />
+              <Blockies seed={account.address} size={9} scale={2.5} />
             </ProfileButton>
           </Dropdown>
         </HeaderContentWrapper>

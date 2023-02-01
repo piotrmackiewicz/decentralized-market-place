@@ -1,4 +1,4 @@
-import { Alert, Card, Divider, Grid, Row, Spin } from 'antd';
+import { Card, Divider, Row, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
@@ -33,7 +33,11 @@ export const ShopPage = () => {
         <Spin />
       ) : (
         <Card>
-          <Row>{success && <ShopDetails shop={shopInfo} />}</Row>
+          {success && (
+            <Row>
+              <ShopDetails shop={shopInfo} />
+            </Row>
+          )}
           <Divider orientation='left'>Shop Offers</Divider>
           <Row>
             <ShopOffers />

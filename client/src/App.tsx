@@ -43,7 +43,7 @@ function App() {
     if (!web3Store.network) {
       web3Store.loadNetwork();
     }
-    if (!web3Store.account) {
+    if (!web3Store.account.address) {
       web3Store.loadAccount();
     }
     if (!web3Store.signer) {

@@ -62,6 +62,15 @@ async function main() {
     res.json(offer);
   });
 
+  app.get('/account', async (req, res) => {
+    const { address } = req.query;
+    if (!address) {
+      res.status(422);
+    }
+    const shops = await db.getOwnerShops(address);
+    res.json({ address, isSeller: shops.length > 0 });
+  });
+
   app.listen('3001', () => {
     console.log('Backend is running on port 3001...');
   });

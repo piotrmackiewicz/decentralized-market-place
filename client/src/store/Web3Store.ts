@@ -1,10 +1,12 @@
 import { ethers } from 'ethers';
 import { makeAutoObservable } from 'mobx';
+import { fetchAccount } from '../api/accounts';
+import { Account } from '../types';
 
 export class Web3Store {
   public provider: ethers.providers.Web3Provider | null = null;
   public network: ethers.providers.Network | null = null;
-  public account: string = '';
+  public account: Account = { address: '', isSeller: false };
   public signer: ethers.providers.JsonRpcSigner | null = null;
 
   constructor() {
@@ -26,7 +28,8 @@ export class Web3Store {
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
-    this.account = accounts[0];
+    const account = await fetchAccount({ address: accounts[0] });
+    this.account = { address: accounts[0], isSeller: account.isSeller };
   };
 
   public loadSigner = () => {

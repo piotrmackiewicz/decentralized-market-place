@@ -15,7 +15,7 @@ export const MyShopping = observer(() => {
     data: sales,
   } = useQuery<{ data: Sale[] }, AxiosError>(
     ['user-sales', account],
-    () => fetchSales({ buyer: account }),
+    () => fetchSales({ buyer: account.address }),
     {
       enabled: !!account,
     }

@@ -77,7 +77,7 @@ async function syncDatabaseWithBlockchain(provider, db, market) {
     const shop = new ethers.Contract(shopAddress, SHOP_ABI, provider);
     const isSuspended = await shop.getIsOffersSuspended();
 
-    await db.insertShop(shopId, shopAddress, owner, isSuspended);
+    await db.insertShop(shopId, shopAddress, owner.toLowerCase(), isSuspended);
 
     const offerCreatedStream = await shop.queryFilter('OfferCreated', 0, block);
 
@@ -142,7 +142,7 @@ async function syncDatabaseWithBlockchain(provider, db, market) {
 
 function setEventListeners(provider, db, market) {
   market.on('ShopCreated', (id, shopAddress, owner, _name, _paymentAddress) => {
-    db.insertShop(id, shopAddress, owner, false);
+    db.insertShop(id, shopAddress, owner.toLowerCase(), false);
 
     let shop = new ethers.Contract(shopAddress, SHOP_ABI, provider);
 

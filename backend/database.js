@@ -239,6 +239,17 @@ class DatabaseConnection {
       },
     }));
   }
+
+  async getOwnerShops(ownerAddress) {
+    const query = `
+      SELECT address, id, suspended, owner
+      FROM shops
+      WHERE owner = $1
+    `;
+    const values = [ownerAddress];
+    const result = await this.#pool.query(query, values);
+    return result.rows;
+  }
 }
 
 module.exports = DatabaseConnection;

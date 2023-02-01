@@ -31,3 +31,8 @@ export type Sale = {
   quantity: number;
   offer: Offer;
 };
+
+export type Account = {
+  address: string;
+  isSeller: boolean;
+};
