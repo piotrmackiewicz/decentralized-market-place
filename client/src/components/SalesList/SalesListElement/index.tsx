@@ -1,4 +1,5 @@
 import { Button, Typography } from 'antd';
+import { Routes } from 'components/Router/routes';
 import { ethers } from 'ethers';
 import { Link } from 'react-router-dom';
 import { Sale } from '../../../types';
@@ -29,7 +30,11 @@ export const SalesListElement = ({ sale }: Props) => {
           <Typography>Pieces: {sale.quantity}</Typography>
         </SalesInfoWrapper>
         <Link
-          to={`/offer/${sale.offer.shop_id}/${sale.offer.id}`}
+          to={Routes.Offer.replace(
+            ':shopId',
+            sale.offer.shop_id.toString()
+          ).replace(':offerId', sale.offer.id.toString())}
+          // to={`/offer/${sale.offer.shop_id}/${sale.offer.id}`}
           state={{ offer: sale.offer }}
         >
           <Button>View offer</Button>

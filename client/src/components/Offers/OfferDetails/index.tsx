@@ -1,4 +1,5 @@
 import { Button, Col, InputNumber, Row, Typography } from 'antd';
+import { Routes } from 'components/Router/routes';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -71,7 +72,9 @@ export const OfferDetails = ({ offer }: Props) => {
               {shopInfo.id && shopInfo.name && (
                 <ShopLinkWrapper>
                   <span>Shop: </span>
-                  <Link to={`/shop/${shopInfo.id}`}>{shopInfo.name}</Link>
+                  <Link to={Routes.Shop.replace(':shopId', shopInfo.id)}>
+                    {shopInfo.name}
+                  </Link>
                 </ShopLinkWrapper>
               )}
             </OfferTopInfoLeftSide>

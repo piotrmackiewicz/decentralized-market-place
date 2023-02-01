@@ -12,6 +12,7 @@ import Blockies from 'react-blockies';
 import { Link } from 'react-router-dom';
 import { useCallback } from 'react';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
+import { Routes } from 'components/Router/routes';
 
 interface Props {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ export const Layout = observer(({ children }: Props) => {
   const buildMenuItems = useCallback(() => {
     const menuItems: ItemType[] = [
       {
-        label: <Link to='/my-shopping'>My shopping</Link>,
+        label: <Link to={Routes.MyShopping}>My shopping</Link>,
         key: 'my-shopping',
       },
       {
@@ -36,7 +37,7 @@ export const Layout = observer(({ children }: Props) => {
     ];
     if (account.isSeller) {
       menuItems.push({
-        label: <span>My Shops</span>,
+        label: <Link to={Routes.MyShops}>My Shops</Link>,
         key: 'my-shops',
       });
     } else {
@@ -53,7 +54,7 @@ export const Layout = observer(({ children }: Props) => {
     <AntLayout>
       <AntLayout.Header>
         <HeaderContentWrapper>
-          <Link to='/'>
+          <Link to={Routes.Home}>
             <BrandWrapper>DMarkETH</BrandWrapper>
           </Link>
           <Dropdown

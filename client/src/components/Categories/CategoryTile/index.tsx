@@ -1,3 +1,4 @@
+import { Routes } from 'components/Router/routes';
 import { Link } from 'react-router-dom';
 import { Category } from '../../../types';
 import { CategoryButton } from '../Categories.styled';
@@ -7,7 +8,7 @@ interface Props {
 }
 
 export const CategoryTile = ({ category }: Props) => (
-  <Link to={`/category/${category.id}`}>
+  <Link to={Routes.Category.replace(':categoryId', category.id)}>
     <CategoryButton>{category.name}</CategoryButton>
   </Link>
 );
