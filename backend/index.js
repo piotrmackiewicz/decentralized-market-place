@@ -26,6 +26,15 @@ async function main() {
     res.json({ data: categories });
   });
 
+  app.get('/offer', async (req, res) => {
+    const { shopId, offerId } = req.query;
+    if (!shopId || !offerId) {
+      res.status(422);
+    }
+    const offer = await db.getOfferByShopIdAndOfferId(shopId, offerId);
+    res.json(offer);
+  });
+
   app.get('/offers', async (req, res) => {
     const { categoryId, shopId, buyer } = req.query;
 
@@ -53,15 +62,6 @@ async function main() {
     res.status(422);
   });
 
-  app.get('/offer', async (req, res) => {
-    const { shopId, offerId } = req.query;
-    if (!shopId || !offerId) {
-      res.status(422);
-    }
-    const offer = await db.getOfferByShopIdAndOfferId(shopId, offerId);
-    res.json(offer);
-  });
-
   app.get('/account', async (req, res) => {
     const { address } = req.query;
     if (!address) {
@@ -69,6 +69,29 @@ async function main() {
     }
     const shops = await db.getOwnerShops(address);
     res.json({ address, isSeller: shops.length > 0 });
+  });
+
+  app.get('/shops', async (req, res) => {
+    const { owner } = req.query;
+    if (owner) {
+      const shops = await db.getOwnerShops(owner);
+      const provider = new ethers.providers.JsonRpcProvider(
+        'http://127.0.0.1:7545'
+      );
+      for (let i = 0; i < shops.length; i++) {
+        const shop = shops[i];
+        const { address } = shop;
+        const shopContract = new ethers.Contract(address, SHOP_ABI, provider);
+        shop.paymentAddress = await shopContract.getPaymentAddress();
+        shop.offersCount = Number(await shopContract.getOffersCount());
+        shop.salesCount = Number(await shopContract.getSalesCount());
+        // TODO: this is hack to keep consistency in client types
+        shop.offersSuspended = shop.suspended;
+      }
+      res.json({ data: shops });
+    }
+
+    res.status(422);
   });
 
   app.listen('3001', () => {

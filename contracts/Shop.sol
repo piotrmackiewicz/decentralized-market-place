@@ -8,6 +8,7 @@ import "hardhat/console.sol";
 contract Shop {
     uint256 private id;
     address private owner;
+    // TODO: I don't think name should be stores onchain
     string private name;
     address payable private paymentAddress;
     uint256 private offersCount;

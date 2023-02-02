@@ -5,4 +5,6 @@ export enum Routes {
   Offer = '/offer/:shopId/:offerId',
   Shop = '/shop/:shopId',
   MyShops = '/my-shops',
+  MyShopOffers = '/my-shops/:shopId/offers',
+  EditOffer = '/offer/:shopId/:offerId/edit',
 }

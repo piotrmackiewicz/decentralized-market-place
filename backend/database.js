@@ -19,15 +19,21 @@ class DatabaseConnection {
     this.#pool = new Pool(credentials);
   }
 
-  insertShop(id, address, owner, suspended) {
+  async insertShop(id, address, owner, name, suspended) {
     const query = `
-            INSERT INTO shops (id, address, owner, suspended)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO shops (id, address, owner, name, suspended)
+            VALUES ($1, $2, $3, $4, $5)
             ON CONFLICT (id) DO UPDATE
-            SET suspended = $4
+            SET suspended = $5
         `;
-    const values = [parseBigNumberToNumeric(id), address, owner, suspended];
-    this.#pool.query(query, values);
+    const values = [
+      parseBigNumberToNumeric(id),
+      address,
+      owner,
+      name,
+      suspended,
+    ];
+    await this.#pool.query(query, values);
   }
 
   suspendOffers(shopAddress) {
@@ -242,7 +248,7 @@ class DatabaseConnection {
 
   async getOwnerShops(ownerAddress) {
     const query = `
-      SELECT address, id, suspended, owner
+      SELECT address, id, suspended, owner, name
       FROM shops
       WHERE owner = $1
     `;

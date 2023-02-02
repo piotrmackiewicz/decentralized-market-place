@@ -6,6 +6,8 @@ import { ShopPage } from 'pages/ShopPage';
 import { MyShoppingPage } from 'pages/MyShoppingPage';
 import { MyShopsPage } from 'pages/MyShopsPage';
 import { Routes } from './routes';
+import { MyShopOffers } from 'pages/MyShopOffersPage';
+import { EditOfferPage } from 'pages/EditOfferPage';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
   {
     path: Routes.MyShops,
     element: <MyShopsPage />,
+  },
+  {
+    path: Routes.MyShopOffers,
+    element: <MyShopOffers />,
+  },
+  {
+    path: Routes.EditOffer,
+    element: <EditOfferPage />,
   },
 ]);
 

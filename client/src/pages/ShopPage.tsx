@@ -39,9 +39,7 @@ export const ShopPage = () => {
             </Row>
           )}
           <Divider orientation='left'>Shop Offers</Divider>
-          <Row>
-            <ShopOffers />
-          </Row>
+          <Row>{shopId && <ShopOffers shopId={shopId} />}</Row>
         </Card>
       )}
     </Layout>

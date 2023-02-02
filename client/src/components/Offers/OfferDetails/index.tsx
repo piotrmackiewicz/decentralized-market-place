@@ -3,6 +3,7 @@ import { Routes } from 'components/Router/routes';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import web3Store from 'store/Web3Store';
 import { useMarketContract } from '../../../hooks/useMarketContract';
 import { useOfferUpdate } from '../../../hooks/useOfferUpdate';
 import { useShopContract } from '../../../hooks/useShopContract';
@@ -21,6 +22,7 @@ interface Props {
   offer: Offer;
 }
 export const OfferDetails = ({ offer }: Props) => {
+  const { account } = web3Store;
   const [selectedQuantity, setSelectedQuantity] = useState<
     string | number | null
   >(1);
@@ -34,6 +36,7 @@ export const OfferDetails = ({ offer }: Props) => {
     shopContractAddress: shopAddress,
     offer,
   });
+  const isUserShopOwner = account.address === shopInfo.owner.toLowerCase();
 
   const handleBuy = () => {
     buyProduct(updatedOffer.id, Number(selectedQuantity), buyPrice);
@@ -89,23 +92,35 @@ export const OfferDetails = ({ offer }: Props) => {
         </OfferInfo>
       </Col>
       <Col span={8}>
-        <BuyWrapper>
-          <InputNumber
-            min={1}
-            max={updatedOffer.quantity}
-            value={selectedQuantity}
-            onChange={setSelectedQuantity}
-          />
-          <Button
-            type='primary'
-            onClick={handleBuy}
-            loading={loading}
-            disabled={!selectedQuantity}
+        {isUserShopOwner ? (
+          <Link
+            to={Routes.EditOffer.replace(':shopId', shopInfo.id).replace(
+              ':offerId',
+              offer.id.toString()
+            )}
           >
-            Buy {selectedQuantity} {selectedQuantity === 1 ? 'piece' : 'pieces'}{' '}
-            for ~{buyPrice} ETH
-          </Button>
-        </BuyWrapper>
+            <Button type='primary'>Edit Offer</Button>
+          </Link>
+        ) : (
+          <BuyWrapper>
+            <InputNumber
+              min={1}
+              max={updatedOffer.quantity}
+              value={selectedQuantity}
+              onChange={setSelectedQuantity}
+            />
+            <Button
+              type='primary'
+              onClick={handleBuy}
+              loading={loading}
+              disabled={!selectedQuantity}
+            >
+              Buy {selectedQuantity}{' '}
+              {selectedQuantity === 1 ? 'piece' : 'pieces'} for ~{buyPrice} ETH
+            </Button>
+          </BuyWrapper>
+        )}
+
         {updatedOffer.images ? (
           <OfferGallery images={updatedOffer.images} />
         ) : (
